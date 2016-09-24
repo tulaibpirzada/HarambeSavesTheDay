@@ -21,7 +21,7 @@ public class GorillaMovement : MonoBehaviour {
             gorillaAnim.SetFloat("x", input_x);
         }
 
-        transform.position += new Vector3(input_x, 0, 0).normalized*Time.deltaTime;
+		transform.position += new Vector3(input_x, 0, 0).normalized*Time.deltaTime/2.0f;
 
     }
 }
