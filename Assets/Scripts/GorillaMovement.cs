@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class GorillaMovement : MonoBehaviour {
-
+    private bool isWalking;
     private Animator gorillaAnim;
 
 	// Use this for initialization
@@ -11,10 +11,10 @@ public class GorillaMovement : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         float input_x = Input.GetAxisRaw("Horizontal");
 
-        bool isWalking = (Mathf.Abs(input_x)) > 0;
+        isWalking = (Mathf.Abs(input_x)) > 0;
         gorillaAnim.SetBool("isWalking",isWalking);
         if (isWalking)
         {
@@ -22,6 +22,8 @@ public class GorillaMovement : MonoBehaviour {
         }
 
 		transform.position += new Vector3(input_x, 0, 0).normalized*Time.deltaTime/2.0f;
+        transform.position = new Vector3(
+                                Mathf.Clamp(transform.position.x, -5.1900f, 5.1900f), transform.position.y, transform.position.z);
 
     }
 }
