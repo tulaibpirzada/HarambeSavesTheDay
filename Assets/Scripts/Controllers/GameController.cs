@@ -20,13 +20,12 @@ public class GameController : Singleton<GameController>
 	{
 		gameContextObject = gameObject;
 		gameRef = gameContextObject.GetComponent<GameReferences> ();
-		StartGame ();
-//		GameStartScreenController.Instance.ShowGameStartMenu (gameRef.gameStartScreenRef);
+		GameStartScreenController.Instance.ShowGameStartMenu (gameRef.gameStartScreenRef);
 
 	}
 	public void StartGame()
 	{
-//		GameStartScreenController.Instance.HideGameStartMenu ();
+		GameStartScreenController.Instance.HideGameStartMenu ();
 		GorillaMovementController.Instance.Init (gameContextObject);
         StartCoroutine(Spawn());
     }
