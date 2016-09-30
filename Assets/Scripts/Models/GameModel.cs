@@ -4,9 +4,13 @@ using System.Collections.Generic;
 
 public class GameModel: Singleton <GameModel>
 {
-
-	public void SetUpGameVariables()
+    private float speed;
+    public float Speed
+    {
+        get { return speed; }
+    }
+    public void SetUpGameVariables()
 	{
-		
-	}
+        speed = 2.0f;
+    }
 }

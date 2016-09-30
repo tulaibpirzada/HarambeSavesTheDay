@@ -10,6 +10,5 @@ public class GameReferences : MonoBehaviour
 	public GameObject leftMovementControl;
 	public GameObject rightMovementControl;
 	public GameObject gorilla;
-	public GameObject fatChild;
-	public GameObject slimChild;
+    public GameObject[] kids;
 }

@@ -33,16 +33,20 @@ public class GameController : Singleton<GameController>
     IEnumerator Spawn()
     {
         yield return new WaitForSeconds(2.0f);
-        GameObject kid = gameRef.kids[Random.Range(0, gameRef.kids.Length)];
-        float[] x_values = { -5.1900f, 5.1900f };
-        float x_value = x_values[Random.Range(0, x_values.Length)];
-        Vector3 spawnPosition = new Vector3(
-            x_value,
-            0.0f,
-            0.0f
-            );
-        Quaternion spawnRotation = Quaternion.identity;
-        Instantiate(kid, spawnPosition, spawnRotation);
-        yield return new WaitForSeconds(Random.Range(1.0f, 2.0f));
+        //while(true)
+        //{
+            GameObject kid = gameRef.kids[Random.Range(0, gameRef.kids.Length)];
+            float[] x_values = { -5.1900f, 5.1900f };
+            float x_value = x_values[Random.Range(0, x_values.Length)];
+            Vector3 spawnPosition = new Vector3(
+                x_value,
+                0.0f,
+                0.0f
+                );
+            Quaternion spawnRotation = Quaternion.identity;
+            Instantiate(kid, spawnPosition, spawnRotation);
+            yield return new WaitForSeconds(Random.Range(1.0f, 2.0f));
+        //}
+        
     }
 }
