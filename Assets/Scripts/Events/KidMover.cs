@@ -9,7 +9,7 @@ public class KidMover : MonoBehaviour {
 
 	void Start () {
         kidAnim = GetComponent<Animator>();
-        targetPosition = new Vector3(-transform.position.x, 0.0f, 0.0f);
+		targetPosition = new Vector3(-transform.position.x, transform.position.y, 0.0f);
         isFalling = false;
         kidAnim.SetBool("isFalling", false);
         if(targetPosition.x > 0)
@@ -25,13 +25,13 @@ public class KidMover : MonoBehaviour {
 
 	IEnumerator FallKid()
 	{
-		yield return new WaitForSeconds (Random.Range (1.0f, 7.0f));
+		yield return new WaitForSeconds (Random.Range (1.0f, 5.0f));
 		isFalling = true;
         kidAnim.SetBool("isFalling", true);
 		GetComponent<Rigidbody2D>().isKinematic = false;
 			
 	}
-	
+
 	void Update () 
 	{
         if(!isFalling)

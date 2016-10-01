@@ -40,12 +40,12 @@ public class GameController : Singleton<GameController>
             float x_value = x_values[Random.Range(0, x_values.Length)];
             Vector3 spawnPosition = new Vector3(
                 x_value,
-                0.0f,
+				1.1f,
                 0.0f
                 );
             Quaternion spawnRotation = Quaternion.identity;
             Instantiate(kid, spawnPosition, spawnRotation);
-            yield return new WaitForSeconds(Random.Range(1.0f, 2.0f));
+            yield return new WaitForSeconds(Random.Range(1.0f, 5.0f));
         }
         
     }

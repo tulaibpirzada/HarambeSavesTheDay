@@ -11,6 +11,6 @@ public class GameModel: Singleton <GameModel>
     }
     public void SetUpGameVariables()
 	{
-        speed = 2.0f;
+        speed = 1.0f;
     }
 }
