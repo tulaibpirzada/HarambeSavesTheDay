@@ -49,4 +49,14 @@ public class GameController : Singleton<GameController>
         }
         
     }
+
+	public GameObject GetLeftHandControlCollider ()
+	{
+		return gameRef.leftMovementControl;
+	}
+
+	public GameObject GetRightHandControlCollider ()
+	{
+		return gameRef.rightMovementControl;
+	}
 }
