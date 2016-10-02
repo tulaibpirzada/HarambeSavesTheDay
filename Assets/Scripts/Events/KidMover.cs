@@ -6,6 +6,7 @@ public class KidMover : MonoBehaviour {
 	GameReferences gameRef;
     private Vector3 targetPosition;
     private bool isFalling;
+    private bool isCrying;
     private Animator kidAnim;
 
 	void Start () {
@@ -15,6 +16,7 @@ public class KidMover : MonoBehaviour {
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetLeftHandControlCollider().GetComponent<Collider2D>());
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetRightHandControlCollider().GetComponent<Collider2D>());
         isFalling = false;
+        isCrying = false;
         kidAnim.SetBool("isFalling", false);
         if(targetPosition.x > 0)
         {
@@ -31,17 +33,26 @@ public class KidMover : MonoBehaviour {
 	{
 		yield return new WaitForSeconds (Random.Range (1.0f, 5.0f));
 		isFalling = true;
+        isCrying = false;
         kidAnim.SetBool("isFalling", true);
 		GetComponent<Rigidbody2D>().isKinematic = false;
 	}
 
 	void Update () 
 	{
-		if (!isFalling) {
+		if (!isFalling && !isCrying) {
 			float step = GameModel.Instance.Speed * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, targetPosition, step);
 		} else {
 			Debug.Log ("Velocity: " + GetComponent<Rigidbody2D> ().velocity);
 		}
+    }
+    void OnCollisionEnter2D(Collision2D Collision)
+    {
+        isFalling = false;
+        isCrying = true;
+        kidAnim.SetBool("isFalling", false);
+        kidAnim.SetBool("isCrying", true);
+        Debug.Log("Collision");
     }
 }
