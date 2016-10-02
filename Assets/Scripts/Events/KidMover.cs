@@ -8,8 +8,10 @@ public class KidMover : MonoBehaviour {
     private bool isFalling;
     private bool isCrying;
     private Animator kidAnim;
+    private float kidFallingTime;
+    private float gorillaFetchingKidTime;
 
-	void Start () {
+    void Start () {
         kidAnim = GetComponent<Animator>();
 		targetPosition = new Vector3(-transform.position.x, transform.position.y, 0.0f);
 
@@ -40,12 +42,24 @@ public class KidMover : MonoBehaviour {
 
 	void Update () 
 	{
-		if (!isFalling && !isCrying) {
-			float step = GameModel.Instance.Speed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards (transform.position, targetPosition, step);
-		} else {
-			Debug.Log ("Velocity: " + GetComponent<Rigidbody2D> ().velocity);
-		}
+        if(GameModel.Instance.TimeLimitToFetchChild >= (Time.time - kidFallingTime))
+        {
+            GameController.Instance.GameOver();
+
+        }
+        else
+        {
+            if (!isFalling && !isCrying)
+            {
+                float step = GameModel.Instance.Speed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+            }
+            else
+            {
+                Debug.Log("Velocity: " + GetComponent<Rigidbody2D>().velocity);
+            }
+        }
+		
     }
     void OnCollisionEnter2D(Collision2D Collision)
     {
@@ -53,6 +67,7 @@ public class KidMover : MonoBehaviour {
         isCrying = true;
         kidAnim.SetBool("isFalling", false);
         kidAnim.SetBool("isCrying", true);
-        Debug.Log("Collision");
+        kidFallingTime = Time.time;
+        Debug.Log("Time" + kidFallingTime);
     }
 }

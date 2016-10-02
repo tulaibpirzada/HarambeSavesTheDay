@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class GameReferences : MonoBehaviour 
 {
 	public GameStartScreenReferences gameStartScreenRef;
+    public GameOverScreenReferences gameOverScreenRef;
 	public Text playerScoreLabel;
 	public GameObject leftMovementControl;
 	public GameObject rightMovementControl;

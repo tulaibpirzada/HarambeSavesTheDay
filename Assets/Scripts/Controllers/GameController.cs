@@ -29,6 +29,10 @@ public class GameController : Singleton<GameController>
 		GorillaMovementController.Instance.Init (gameContextObject);
         StartCoroutine(Spawn());
     }
+    public void GameOver()
+    {
+        GameOverScreenController.Instance.ShowGameOverMenu(gameRef.gameOverScreenRef);
+    }
 
     IEnumerator Spawn()
     {
