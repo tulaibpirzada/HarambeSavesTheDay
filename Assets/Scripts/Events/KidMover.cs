@@ -42,23 +42,16 @@ public class KidMover : MonoBehaviour {
 
 	void Update () 
 	{
-        if(GameModel.Instance.TimeLimitToFetchChild >= (Time.time - kidFallingTime))
+        if (!isFalling && !isCrying)
         {
-            GameController.Instance.GameOver();
+            float step = GameModel.Instance.Speed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+        }
+		else if(isCrying && GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
+		{
+			GameController.Instance.GameOver();
 
-        }
-        else
-        {
-            if (!isFalling && !isCrying)
-            {
-                float step = GameModel.Instance.Speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
-            }
-            else
-            {
-                Debug.Log("Velocity: " + GetComponent<Rigidbody2D>().velocity);
-            }
-        }
+		}
 		
     }
     void OnCollisionEnter2D(Collision2D Collision)
