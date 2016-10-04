@@ -31,7 +31,8 @@ public class GameController : Singleton<GameController>
     }
     public void GameOver()
     {
-        GameOverScreenController.Instance.ShowGameOverMenu(gameRef.gameOverScreenRef);
+        GorillaMovementController.Instance.GorillaKilled();
+        //GameOverScreenController.Instance.ShowGameOverMenu(gameRef.gameOverScreenRef);
     }
 
     IEnumerator Spawn()

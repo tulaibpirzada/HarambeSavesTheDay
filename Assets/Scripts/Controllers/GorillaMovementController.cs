@@ -7,6 +7,7 @@ public class GorillaMovementController : Singleton<GorillaMovementController>  {
 	private bool shouldAllowGorillaMovement;
 	private bool leftControlTapped;
 	private bool rightControlTapped;
+    private bool isKilled;
 	private Animator gorillaAnim;
 
 	public void Init(GameObject gameObject)
@@ -14,6 +15,7 @@ public class GorillaMovementController : Singleton<GorillaMovementController>  {
 		gameRef = gameObject.GetComponent<GameReferences> ();
 		gorillaAnim = gameRef.gorilla.GetComponent<Animator> ();
 		shouldAllowGorillaMovement = true;
+        isKilled = false;
 	}
 
 	void FixedUpdate()
@@ -85,4 +87,9 @@ public class GorillaMovementController : Singleton<GorillaMovementController>  {
 			}
 		}
 	}
+    public void GorillaKilled()
+    {
+        gorillaAnim.SetBool("isWalking", false);
+        gorillaAnim.SetBool("isKilled", true);
+    }
 }
