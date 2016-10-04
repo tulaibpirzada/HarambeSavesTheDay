@@ -32,7 +32,7 @@ public class GameController : Singleton<GameController>
     public void GameOver()
     {
         GorillaMovementController.Instance.GorillaKilled();
-        //GameOverScreenController.Instance.ShowGameOverMenu(gameRef.gameOverScreenRef);
+        StartCoroutine(Dead());
     }
 
     IEnumerator Spawn()
@@ -50,11 +50,16 @@ public class GameController : Singleton<GameController>
                 );
             Quaternion spawnRotation = Quaternion.identity;
             Instantiate(kid, spawnPosition, spawnRotation);
-            yield return new WaitForSeconds(Random.Range(1.0f, 5.0f));
+            yield return new WaitForSeconds(Random.Range(10.0f, 15.0f));
         }
         
     }
-
+    
+    IEnumerator Dead()
+    {
+        yield return new WaitForSeconds(4.0f);
+        GameOverScreenController.Instance.ShowGameOverMenu(gameRef.gameOverScreenRef);
+    }
 	public GameObject GetLeftHandControlCollider ()
 	{
 		return gameRef.leftMovementControl;

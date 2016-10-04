@@ -17,6 +17,6 @@ public class GameModel: Singleton <GameModel>
     public void SetUpGameVariables()
 	{
         speed = 1.0f;
-        timeLimitToFetchChild = 8.0f;
+        timeLimitToFetchChild = 3.0f;
     }
 }

@@ -10,6 +10,7 @@ public class KidMover : MonoBehaviour {
     private Animator kidAnim;
     private float kidFallingTime;
     private float gorillaFetchingKidTime;
+    private bool isFetched;
 
     void Start () {
         kidAnim = GetComponent<Animator>();
@@ -19,6 +20,7 @@ public class KidMover : MonoBehaviour {
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetRightHandControlCollider().GetComponent<Collider2D>());
         isFalling = false;
         isCrying = false;
+        isFetched = false;
         kidAnim.SetBool("isFalling", false);
         if(targetPosition.x > 0)
         {
@@ -47,7 +49,7 @@ public class KidMover : MonoBehaviour {
             float step = GameModel.Instance.Speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
         }
-		else if(isCrying && GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
+		else if(isCrying && !isFetched && GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
 		{
 			GameController.Instance.GameOver();
 
@@ -62,5 +64,19 @@ public class KidMover : MonoBehaviour {
         kidAnim.SetBool("isCrying", true);
         kidFallingTime = Time.time;
         Debug.Log("Time" + kidFallingTime);
+    }
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "Gorilla")
+        {
+            isFetched = true;
+        }
+    }
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.tag == "Gorilla")
+        {
+            isFetched = false;
+        }
     }
 }
