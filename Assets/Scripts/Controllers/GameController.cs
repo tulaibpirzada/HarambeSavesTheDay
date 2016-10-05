@@ -69,4 +69,9 @@ public class GameController : Singleton<GameController>
 	{
 		return gameRef.rightMovementControl;
 	}
+
+    public GameObject GetGorillaCollider()
+    {
+        return gameRef.gorilla;
+    }
 }

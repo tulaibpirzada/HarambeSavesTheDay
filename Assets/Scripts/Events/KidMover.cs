@@ -5,12 +5,14 @@ public class KidMover : MonoBehaviour {
     
 	GameReferences gameRef;
     private Vector3 targetPosition;
+    private Vector3 kidTargetPosition;
     private bool isFalling;
     private bool isCrying;
     private Animator kidAnim;
     private float kidFallingTime;
     private float gorillaFetchingKidTime;
     private bool isFetched;
+    private bool isGoingUp;
 
     void Start () {
         kidAnim = GetComponent<Animator>();
@@ -18,9 +20,11 @@ public class KidMover : MonoBehaviour {
 
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetLeftHandControlCollider().GetComponent<Collider2D>());
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetRightHandControlCollider().GetComponent<Collider2D>());
+        //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetGorillaCollider().GetComponent<Collider2D>());
         isFalling = false;
         isCrying = false;
         isFetched = false;
+        isGoingUp = false;
         kidAnim.SetBool("isFalling", false);
         if(targetPosition.x > 0)
         {
@@ -54,7 +58,14 @@ public class KidMover : MonoBehaviour {
 			GameController.Instance.GameOver();
 
 		}
-		
+        else if (isGoingUp & isCrying)
+        {
+            kidTargetPosition = new Vector3(transform.position.x, 1.1f, 0.0f);
+            float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
+            transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
+            GetComponent<Rigidbody2D>().isKinematic = true;
+        }
+
     }
     void OnCollisionEnter2D(Collision2D Collision)
     {
@@ -64,19 +75,23 @@ public class KidMover : MonoBehaviour {
         kidAnim.SetBool("isCrying", true);
         kidFallingTime = Time.time;
         Debug.Log("Time" + kidFallingTime);
+        //GetComponent<Rigidbody2D>().isKinematic = true;
     }
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.tag == "Gorilla")
         {
             isFetched = true;
+            isGoingUp = true;
+            //GetComponent<Rigidbody2D>().velocity = transform.up * 25.0f;
+            //GetComponent<Rigidbody2D>().isKinematic = true;
         }
     }
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (collider.tag == "Gorilla")
-        {
-            isFetched = false;
-        }
-    }
+    //void OnTriggerExit2D(Collider2D collider)
+    //{
+    //    if (collider.tag == "Gorilla")
+    //    {
+    //        isFetched = false;
+    //    }
+    //}
 }
