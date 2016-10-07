@@ -6,6 +6,13 @@ public class GameModel: Singleton <GameModel>
 {
     private float timeLimitToFetchChild;
     private float speed;
+    private float currentTime;
+
+    public float CurrentTime
+    {
+        get { return currentTime; }
+        set { currentTime = value; }
+    }
     public float TimeLimitToFetchChild
     {
         get { return timeLimitToFetchChild; }

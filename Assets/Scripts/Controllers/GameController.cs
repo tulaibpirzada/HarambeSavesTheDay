@@ -50,7 +50,11 @@ public class GameController : Singleton<GameController>
                 );
             Quaternion spawnRotation = Quaternion.identity;
             Instantiate(kid, spawnPosition, spawnRotation);
+            KidMover kidMover = kid.gameObject.GetComponent<KidMover>();
+            kidMover.gameRef = gameRef;
+            Debug.Log("Kid coming");
             yield return new WaitForSeconds(Random.Range(10.0f, 15.0f));
+            
         }
         
     }

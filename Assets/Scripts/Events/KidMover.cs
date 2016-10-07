@@ -2,8 +2,11 @@
 using System.Collections;
 
 public class KidMover : MonoBehaviour {
+
     
-	GameReferences gameRef;
+    public float damagePerSecond;
+    public int fetchEarning;
+	public GameReferences gameRef;
     private Vector3 targetPosition;
     private Vector3 kidTargetPosition;
     private bool isFalling;
@@ -17,8 +20,9 @@ public class KidMover : MonoBehaviour {
     void Start () {
         kidAnim = GetComponent<Animator>();
 		targetPosition = new Vector3(-transform.position.x, transform.position.y, 0.0f);
-
-		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetLeftHandControlCollider().GetComponent<Collider2D>());
+        GameModel.Instance.CurrentTime = GameModel.Instance.TimeLimitToFetchChild;
+        //ResetHealthBar();
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetLeftHandControlCollider().GetComponent<Collider2D>());
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetRightHandControlCollider().GetComponent<Collider2D>());
         //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetGorillaCollider().GetComponent<Collider2D>());
         isFalling = false;
@@ -53,17 +57,26 @@ public class KidMover : MonoBehaviour {
             float step = GameModel.Instance.Speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
         }
-		else if(isCrying && !isFetched && GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
+		else if(isCrying && !isFetched)
 		{
-			GameController.Instance.GameOver();
+            if(GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
+            {
+                GameController.Instance.GameOver();
+            }
+            else
+            {
+                UpdateTimeBar();
+            }
 
-		}
+        }
         else if (isGoingUp & isCrying)
         {
             kidTargetPosition = new Vector3(transform.position.x, 1.1f, 0.0f);
             float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
             transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
             GetComponent<Rigidbody2D>().isKinematic = true;
+            ResetHealthBar();
+            Debug.Log("Reset");
         }
 
     }
@@ -94,4 +107,13 @@ public class KidMover : MonoBehaviour {
     //        isFetched = false;
     //    }
     //}
+    private void UpdateTimeBar()
+    {
+        gameRef.timeBar.transform.localScale = new Vector3(((GameModel.Instance.TimeLimitToFetchChild-(Time.time-kidFallingTime))/ GameModel.Instance.TimeLimitToFetchChild), 1.0f, 1.0f);
+        Debug.Log("Update Time Bar"+ (GameModel.Instance.TimeLimitToFetchChild - (Time.time - kidFallingTime)) / GameModel.Instance.TimeLimitToFetchChild);
+    }
+    private void ResetHealthBar()
+    {
+        gameRef.timeBar.transform.localScale = new Vector3((GameModel.Instance.TimeLimitToFetchChild/GameModel.Instance.TimeLimitToFetchChild), 1.0f, 1.0f);
+    }
 }
