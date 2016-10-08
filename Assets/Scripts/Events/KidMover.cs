@@ -41,14 +41,13 @@ public class KidMover : MonoBehaviour {
             kidAnim.SetFloat("x", -1);
         }
         StartCoroutine(KidStanding());
-		StartCoroutine (FallKid ());
+//		StartCoroutine (FallKid ());
 	}
     IEnumerator KidStanding()
     {
-        yield return new WaitForSeconds(3.0f);
+		yield return new WaitForSeconds(Random.Range (3.0f, 7.0f));
         isFalling = false;
         isStanding = true;
-        kidAnim.SetBool("isFalling", false);
         kidAnim.SetBool("isStanding", true);
     }
 	IEnumerator FallKid()
@@ -73,7 +72,7 @@ public class KidMover : MonoBehaviour {
         {
             if (GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
             {
-                GameController.Instance.GameOver();
+//                GameController.Instance.GameOver();
             }
             //else
             //{
