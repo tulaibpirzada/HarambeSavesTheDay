@@ -40,7 +40,7 @@ public class GameController : Singleton<GameController>
         yield return new WaitForSeconds(2.0f);
         while(true)
         {
-			GameObject kid = gameRef.kids [0];//[Random.Range(0, gameRef.kids.Length)];
+			GameObject kid = gameRef.kids[Random.Range(0, gameRef.kids.Length)];
             float[] x_values = { -5.1900f, 5.1900f };
 			float x_value = x_values [Random.Range(0, x_values.Length)];
             Vector3 spawnPosition = new Vector3(
