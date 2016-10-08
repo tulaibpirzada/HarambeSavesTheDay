@@ -45,7 +45,7 @@ public class GameController : Singleton<GameController>
             float x_value = x_values[Random.Range(0, x_values.Length)];
             Vector3 spawnPosition = new Vector3(
                 x_value,
-				1.1f,
+				0.47f,
                 0.0f
                 );
             Quaternion spawnRotation = Quaternion.identity;

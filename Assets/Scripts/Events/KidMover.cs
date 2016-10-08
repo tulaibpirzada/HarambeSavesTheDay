@@ -16,10 +16,11 @@ public class KidMover : MonoBehaviour {
     private float gorillaFetchingKidTime;
     private bool isFetched;
     private bool isGoingUp;
+    private bool isStanding;
 
     void Start () {
         kidAnim = GetComponent<Animator>();
-		targetPosition = new Vector3(-transform.position.x, transform.position.y, 0.0f);
+		targetPosition = new Vector3(-transform.position.x, 0.47f, 0.0f);
         GameModel.Instance.CurrentTime = GameModel.Instance.TimeLimitToFetchChild;
         //ResetHealthBar();
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetLeftHandControlCollider().GetComponent<Collider2D>());
@@ -29,6 +30,7 @@ public class KidMover : MonoBehaviour {
         isCrying = false;
         isFetched = false;
         isGoingUp = false;
+
         kidAnim.SetBool("isFalling", false);
         if(targetPosition.x > 0)
         {
@@ -38,35 +40,45 @@ public class KidMover : MonoBehaviour {
         {
             kidAnim.SetFloat("x", -1);
         }
+        StartCoroutine(KidStanding());
 		StartCoroutine (FallKid ());
 	}
-
+    IEnumerator KidStanding()
+    {
+        yield return new WaitForSeconds(3.0f);
+        isFalling = false;
+        isStanding = true;
+        kidAnim.SetBool("isFalling", false);
+        kidAnim.SetBool("isStanding", true);
+    }
 	IEnumerator FallKid()
 	{
-		yield return new WaitForSeconds (Random.Range (1.0f, 5.0f));
+		yield return new WaitForSeconds (Random.Range (5.0f, 10.0f));
 		isFalling = true;
         isCrying = false;
+        isStanding = false;
+        kidAnim.SetBool("isStanding", false);
         kidAnim.SetBool("isFalling", true);
 		GetComponent<Rigidbody2D>().isKinematic = false;
 	}
 
 	void Update () 
 	{
-        if (!isFalling && !isCrying)
+        if (!isFalling && !isCrying && !isStanding)
         {
             float step = GameModel.Instance.Speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
         }
-		else if(isCrying && !isFetched)
-		{
-            if(GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
+        else if (isCrying && !isFetched)
+        {
+            if (GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
             {
                 GameController.Instance.GameOver();
             }
-            else
-            {
-                UpdateTimeBar();
-            }
+            //else
+            //{
+            //    UpdateTimeBar();
+            //}
 
         }
         else if (isGoingUp & isCrying)
@@ -75,7 +87,7 @@ public class KidMover : MonoBehaviour {
             float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
             transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
             GetComponent<Rigidbody2D>().isKinematic = true;
-            ResetHealthBar();
+            //ResetHealthBar();
             Debug.Log("Reset");
         }
 
@@ -85,6 +97,7 @@ public class KidMover : MonoBehaviour {
         isFalling = false;
         isCrying = true;
         kidAnim.SetBool("isFalling", false);
+        kidAnim.SetBool("isStanding", false);
         kidAnim.SetBool("isCrying", true);
         kidFallingTime = Time.time;
         Debug.Log("Time" + kidFallingTime);
