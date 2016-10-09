@@ -58,7 +58,11 @@ public class GameController : Singleton<GameController>
         }
         
     }
-    
+    public void UpdateScore(int score)
+    {
+        gameRef.playerScoreLabel.text = "Score:\n" + score;
+        Debug.Log("Score: " + score);
+    } 
     IEnumerator Dead()
     {
         yield return new WaitForSeconds(4.0f);

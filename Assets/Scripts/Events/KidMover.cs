@@ -5,7 +5,7 @@ public class KidMover : MonoBehaviour {
 
     
     public float damagePerSecond;
-    public int fetchEarning;
+    public int kidfetchEarning;
 	public GameReferences gameRef;
     private Vector3 targetPosition;
     private Vector3 kidTargetPosition;
@@ -17,8 +17,11 @@ public class KidMover : MonoBehaviour {
     private bool isFetched;
     private bool isGoingUp;
     private bool isStanding;
+    private int score;
 
     void Start () {
+        score = 0;
+        GameController.Instance.UpdateScore(score);
         kidAnim = GetComponent<Animator>();
 		targetPosition = new Vector3(-transform.position.x, 0.62f, 0.0f);
         GameModel.Instance.CurrentTime = GameModel.Instance.TimeLimitToFetchChild;
@@ -86,6 +89,8 @@ public class KidMover : MonoBehaviour {
             float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
             transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
             GetComponent<Rigidbody2D>().isKinematic = true;
+            score += kidfetchEarning;
+            GameController.Instance.UpdateScore(score);
             //ResetHealthBar();
             Debug.Log("Reset");
         }
@@ -129,6 +134,8 @@ public class KidMover : MonoBehaviour {
     }
     private void ResetHealthBar()
     {
-        gameRef.timeBar.transform.localScale = new Vector3((GameModel.Instance.TimeLimitToFetchChild/GameModel.Instance.TimeLimitToFetchChild), 1.0f, 1.0f);
+        gameRef.timeBar.transform.localScale = new Vector3((GameModel.Instance.TimeLimitToFetchChild / GameModel.Instance.TimeLimitToFetchChild), 1.0f, 1.0f);
     }
+
+        //gameRef.playerScoreLabel.text = "Score:\n" + score;
 }
