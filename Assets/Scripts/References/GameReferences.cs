@@ -13,4 +13,5 @@ public class GameReferences : MonoBehaviour
 	public GameObject gorilla;
     public GameObject[] kids;
     public SpriteRenderer timeBar;
+	public GameObject[] throwBackButtons;
 }
