@@ -20,7 +20,7 @@ public class KidMover : MonoBehaviour {
 
     void Start () {
         kidAnim = GetComponent<Animator>();
-		targetPosition = new Vector3(-transform.position.x, 0.47f, 0.0f);
+		targetPosition = new Vector3(-transform.position.x, 0.62f, 0.0f);
         GameModel.Instance.CurrentTime = GameModel.Instance.TimeLimitToFetchChild;
         //ResetHealthBar();
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetLeftHandControlCollider().GetComponent<Collider2D>());
@@ -41,18 +41,18 @@ public class KidMover : MonoBehaviour {
             kidAnim.SetFloat("x", -1);
         }
         StartCoroutine(KidStanding());
-//		StartCoroutine (FallKid ());
 	}
     IEnumerator KidStanding()
     {
-		yield return new WaitForSeconds(Random.Range (3.0f, 7.0f));
+		yield return new WaitForSeconds(Random.Range (1.0f, 7.0f));
         isFalling = false;
         isStanding = true;
         kidAnim.SetBool("isStanding", true);
     }
+
 	IEnumerator FallKid()
 	{
-		yield return new WaitForSeconds (Random.Range (5.0f, 10.0f));
+		yield return new WaitForSeconds (Random.Range (2.0f, 5.0f));
 		isFalling = true;
         isCrying = false;
         isStanding = false;
@@ -82,7 +82,7 @@ public class KidMover : MonoBehaviour {
         }
         else if (isGoingUp & isCrying)
         {
-            kidTargetPosition = new Vector3(transform.position.x, 1.1f, 0.0f);
+			kidTargetPosition = new Vector3(transform.position.x, 0.62f, 0.0f);
             float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
             transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
             GetComponent<Rigidbody2D>().isKinematic = true;
@@ -91,20 +91,23 @@ public class KidMover : MonoBehaviour {
         }
 
     }
-    void OnCollisionEnter2D(Collision2D Collision)
+	void OnCollisionEnter2D(Collision2D collision)
     {
-        isFalling = false;
-        isCrying = true;
-        kidAnim.SetBool("isFalling", false);
-        kidAnim.SetBool("isStanding", false);
-        kidAnim.SetBool("isCrying", true);
-        kidFallingTime = Time.time;
-        Debug.Log("Time" + kidFallingTime);
-        //GetComponent<Rigidbody2D>().isKinematic = true;
+		if(collision.gameObject.tag == "Ground")
+		{
+	        isFalling = false;
+	        isCrying = true;
+	        kidAnim.SetBool("isFalling", false);
+	        kidAnim.SetBool("isStanding", false);
+	        kidAnim.SetBool("isCrying", true);
+	        kidFallingTime = Time.time;
+	        Debug.Log("Time" + kidFallingTime);
+	        //GetComponent<Rigidbody2D>().isKinematic = true;
+		}
     }
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.tag == "Gorilla")
+        if (isCrying && collider.tag == "Gorilla")
         {
             isFetched = true;
             isGoingUp = true;
