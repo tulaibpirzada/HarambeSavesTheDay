@@ -27,6 +27,7 @@ public class GameController : Singleton<GameController>
 	{
 		GameStartScreenController.Instance.HideGameStartMenu ();
 		GorillaMovementController.Instance.Init (gameContextObject);
+//		ResetHealthBar();
         StartCoroutine(Spawn());
     }
     public void GameOver()
@@ -53,7 +54,8 @@ public class GameController : Singleton<GameController>
             KidMover kidMover = kid.gameObject.GetComponent<KidMover>();
             kidMover.gameRef = gameRef;
             Debug.Log("Kid coming");
-            yield return new WaitForSeconds(Random.Range(10.0f, 15.0f));
+			yield return new WaitForSeconds(Random.Range(40.0f, 50.0f));
+//            yield return new WaitForSeconds(Random.Range(10.0f, 15.0f));
             
         }
         
@@ -64,6 +66,12 @@ public class GameController : Singleton<GameController>
         yield return new WaitForSeconds(4.0f);
         GameOverScreenController.Instance.ShowGameOverMenu(gameRef.gameOverScreenRef);
     }
+
+	public void ResetHealthBar()
+	{
+		gameRef.timeBar.transform.localScale = new Vector3((GameModel.Instance.TimeLimitToFetchChild/GameModel.Instance.TimeLimitToFetchChild), 1.0f, 1.0f);
+	}
+
 	public GameObject GetLeftHandControlCollider ()
 	{
 		return gameRef.leftMovementControl;

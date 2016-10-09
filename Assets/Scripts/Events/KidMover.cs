@@ -22,7 +22,6 @@ public class KidMover : MonoBehaviour {
         kidAnim = GetComponent<Animator>();
 		targetPosition = new Vector3(-transform.position.x, 0.62f, 0.0f);
         GameModel.Instance.CurrentTime = GameModel.Instance.TimeLimitToFetchChild;
-        //ResetHealthBar();
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetLeftHandControlCollider().GetComponent<Collider2D>());
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetRightHandControlCollider().GetComponent<Collider2D>());
         //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetGorillaCollider().GetComponent<Collider2D>());
@@ -74,10 +73,10 @@ public class KidMover : MonoBehaviour {
             {
 //                GameController.Instance.GameOver();
             }
-            //else
-            //{
-            //    UpdateTimeBar();
-            //}
+//            else
+//            {
+//                UpdateTimeBar();
+//            }
 
         }
         else if (isGoingUp & isCrying)
@@ -86,8 +85,7 @@ public class KidMover : MonoBehaviour {
             float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
             transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
             GetComponent<Rigidbody2D>().isKinematic = true;
-            //ResetHealthBar();
-            Debug.Log("Reset");
+//            ResetHealthBar();
         }
 
     }
@@ -125,10 +123,5 @@ public class KidMover : MonoBehaviour {
     private void UpdateTimeBar()
     {
         gameRef.timeBar.transform.localScale = new Vector3(((GameModel.Instance.TimeLimitToFetchChild-(Time.time-kidFallingTime))/ GameModel.Instance.TimeLimitToFetchChild), 1.0f, 1.0f);
-        Debug.Log("Update Time Bar"+ (GameModel.Instance.TimeLimitToFetchChild - (Time.time - kidFallingTime)) / GameModel.Instance.TimeLimitToFetchChild);
-    }
-    private void ResetHealthBar()
-    {
-        gameRef.timeBar.transform.localScale = new Vector3((GameModel.Instance.TimeLimitToFetchChild/GameModel.Instance.TimeLimitToFetchChild), 1.0f, 1.0f);
     }
 }

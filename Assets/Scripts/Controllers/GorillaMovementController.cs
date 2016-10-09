@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class GorillaMovementController : Singleton<GorillaMovementController>  {
 
@@ -22,8 +23,7 @@ public class GorillaMovementController : Singleton<GorillaMovementController>  {
 	{
 		if (shouldAllowGorillaMovement)
 		{
-			if ((Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) || (Input.GetMouseButtonDown (0))) {
-					
+			if (!EventSystem.current.IsPointerOverGameObject () && ((Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) || (Input.GetMouseButtonDown (0)))) {
 				Vector3 worldPoint = Vector3.zero;
 				#if UNITY_EDITOR
 				worldPoint = Camera.main.ScreenToWorldPoint (Input.mousePosition);
@@ -50,12 +50,12 @@ public class GorillaMovementController : Singleton<GorillaMovementController>  {
 
 			if ((leftControlTapped || rightControlTapped) && ((Input.touchCount > 0 && (Input.GetTouch (0).phase == TouchPhase.Moved || Input.GetTouch (0).phase == TouchPhase.Stationary))  || (Input.GetAxisRaw ("Mouse X") == 0 || Input.GetAxisRaw ("Mouse Y") == 0))) {
 
-				Debug.Log("Touch Moved");
 				if (leftControlTapped) {
 
 					gorillaAnim.SetBool("isWalking", true);
 					gorillaAnim.SetFloat("x", -1);
-					gameRef.gorilla.transform.position += new Vector3(-1, 0, 0).normalized*Time.deltaTime/2.0f;
+					gameRef.gorilla.transform.position += new Vector3 (-1, 0, 0) * Time.deltaTime * 2.0f;
+					Debug.Log("Delta Time: " + Time.deltaTime);
 					Debug.Log("Incremented value: " + gameRef.gorilla.transform.position);
 					gameRef.gorilla.transform.position = new Vector3(
 						Mathf.Clamp(gameRef.gorilla.transform.position.x, -5.1900f, 5.1900f), gameRef.gorilla.transform.position.y, gameRef.gorilla.transform.position.z);
@@ -64,7 +64,7 @@ public class GorillaMovementController : Singleton<GorillaMovementController>  {
 
 					gorillaAnim.SetBool("isWalking", true);
 					gorillaAnim.SetFloat("x", 1);
-					gameRef.gorilla.transform.position += new Vector3(1, 0, 0).normalized*Time.deltaTime/2.0f;
+					gameRef.gorilla.transform.position += new Vector3 (1, 0, 0) * Time.deltaTime * 2.0f;
 					gameRef.gorilla.transform.position = new Vector3(
 						Mathf.Clamp(gameRef.gorilla.transform.position.x, -5.1900f, 5.1900f), gameRef.gorilla.transform.position.y, gameRef.gorilla.transform.position.z);
 				}
