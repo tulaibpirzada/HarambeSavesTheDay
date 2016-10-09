@@ -21,9 +21,25 @@ public class GameModel: Singleton <GameModel>
     {
         get { return speed; }
     }
+
+	public int Score
+	{
+		get;
+		set;
+	}
+
+	public int HighScore
+	{
+		get;
+		set;
+	}
+
+
     public void SetUpGameVariables()
 	{
         speed = 1.0f;
-        timeLimitToFetchChild = 3.0f;
+        timeLimitToFetchChild = 5.0f;
+		this.Score = 0;
+		this.HighScore = 0;
     }
 }

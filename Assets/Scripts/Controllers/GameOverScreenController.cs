@@ -9,6 +9,8 @@ public class GameOverScreenController : Singleton<GameOverScreenController>
         GameController.Instance.IsUIOpen = true;
         gameOverScreenRef = gameOverScreenReference;
         gameOverScreenRef.gameObject.SetActive(true);
+		gameOverScreenRef.score.text = GameModel.Instance.Score.ToString ();
+		gameOverScreenRef.highestScore.text = GameModel.Instance.Score.ToString ();
     }
 
     public void HideGameOverMenu()

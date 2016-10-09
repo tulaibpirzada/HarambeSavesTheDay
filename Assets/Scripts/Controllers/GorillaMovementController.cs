@@ -23,27 +23,35 @@ public class GorillaMovementController : Singleton<GorillaMovementController>  {
 	{
 		if (shouldAllowGorillaMovement)
 		{
-			if (!EventSystem.current.IsPointerOverGameObject () && ((Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) || (Input.GetMouseButtonDown (0)))) {
+			if ((Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Began) || (Input.GetMouseButtonDown (0))) {
+
+				bool isUITapped = false;
+
 				Vector3 worldPoint = Vector3.zero;
 				#if UNITY_EDITOR
 				worldPoint = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+				isUITapped = EventSystem.current.IsPointerOverGameObject();
 				//for touch device
 				#elif (UNITY_ANDROID || UNITY_IPHONE || UNITY_WP8)
 				worldPoint = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+				isUITapped = EventSystem.current.IsPointerOverGameObject(Input.GetTouch (0).fingerId);
 				#endif
-				GameObject leftMovementControl = gameRef.leftMovementControl;
-				GameObject rightMovementControl = gameRef.rightMovementControl;
-				if (leftMovementControl.GetComponent<Collider2D> ().OverlapPoint (worldPoint)) {
-					
-					leftControlTapped = true;
-					rightControlTapped = false;	
-					Debug.Log("Left Collidor tapped");
-					
-				} else if (rightMovementControl.GetComponent<Collider2D> ().OverlapPoint (worldPoint)) {
-					
-					leftControlTapped = false;
-					rightControlTapped = true;	
-					Debug.Log("Right Collidor tapped");
+
+				if (!isUITapped) {
+					GameObject leftMovementControl = gameRef.leftMovementControl;
+					GameObject rightMovementControl = gameRef.rightMovementControl;
+					if (leftMovementControl.GetComponent<Collider2D> ().OverlapPoint (worldPoint)) {
+						
+						leftControlTapped = true;
+						rightControlTapped = false;	
+						Debug.Log ("Left Collidor tapped");
+						
+					} else if (rightMovementControl.GetComponent<Collider2D> ().OverlapPoint (worldPoint)) {
+						
+						leftControlTapped = false;
+						rightControlTapped = true;	
+						Debug.Log ("Right Collidor tapped");
+					}
 				}
 
 			}

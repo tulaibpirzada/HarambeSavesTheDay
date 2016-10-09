@@ -17,11 +17,10 @@ public class KidMover : MonoBehaviour {
     private bool isFetched;
     private bool isGoingUp;
     private bool isStanding;
-    private int score;
+    
 
-    void Start () {
-        score = 0;
-        GameController.Instance.UpdateScore(score);
+    void Start () 
+	{
         kidAnim = GetComponent<Animator>();
 		targetPosition = new Vector3(-transform.position.x, 0.62f, 0.0f);
         GameModel.Instance.CurrentTime = GameModel.Instance.TimeLimitToFetchChild;
@@ -75,7 +74,7 @@ public class KidMover : MonoBehaviour {
         {
             if (GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
             {
-//                GameController.Instance.GameOver();
+                GameController.Instance.GameOver();
             }
             //else
             //{
@@ -89,10 +88,7 @@ public class KidMover : MonoBehaviour {
             float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
             transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
             GetComponent<Rigidbody2D>().isKinematic = true;
-            score += kidfetchEarning;
-            GameController.Instance.UpdateScore(score);
             //ResetHealthBar();
-            Debug.Log("Reset");
         }
 
     }
@@ -106,20 +102,25 @@ public class KidMover : MonoBehaviour {
 	        kidAnim.SetBool("isStanding", false);
 	        kidAnim.SetBool("isCrying", true);
 	        kidFallingTime = Time.time;
-	        Debug.Log("Time" + kidFallingTime);
+//	        Debug.Log("Time" + kidFallingTime);
 	        //GetComponent<Rigidbody2D>().isKinematic = true;
 		}
     }
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (isCrying && collider.tag == "Gorilla")
+        if (collider.tag == "Gorilla")
         {
-            isFetched = true;
-            isGoingUp = true;
-            //GetComponent<Rigidbody2D>().velocity = transform.up * 25.0f;
-            //GetComponent<Rigidbody2D>().isKinematic = true;
+			GameController.Instance.ActivateThrowBackButtons (this);
         }
     }
+
+	public void ThrowbackKid()
+	{
+		isFetched = true;
+		isGoingUp = true;
+		GameController.Instance.DeactivateThrowbackButtons (kidfetchEarning);
+	}
+
     //void OnTriggerExit2D(Collider2D collider)
     //{
     //    if (collider.tag == "Gorilla")
