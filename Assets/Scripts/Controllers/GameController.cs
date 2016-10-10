@@ -96,11 +96,6 @@ public class GameController : Singleton<GameController>
 		fetchedKid.ThrowbackKid ();
 	}
 
-	public void ResetHealthBar()
-	{
-		gameRef.timeBar.transform.localScale = new Vector3((GameModel.Instance.TimeLimitToFetchChild/GameModel.Instance.TimeLimitToFetchChild), 1.0f, 1.0f);
-	}
-
 	public GameObject GetLeftHandControlCollider ()
 	{
 		return gameRef.leftMovementControl;
