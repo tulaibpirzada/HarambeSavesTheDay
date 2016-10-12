@@ -15,10 +15,19 @@ public class KidMover : MonoBehaviour {
     private Animator kidAnim;
     private float kidFallingTime;
     private float gorillaFetchingKidTime;
-    private bool isFetched;
-    private bool isGoingUp;
     private bool isStanding;
-    
+
+    public bool IsFetched
+    {
+        get;
+        set;
+    }
+
+    public bool IsGoingUp
+    {
+        get;
+        set;
+    }
 
     void Start () 
 	{
@@ -32,8 +41,8 @@ public class KidMover : MonoBehaviour {
         //Physics2D.IgnoreCollision(GetComponent<Collider2D>(), GameController.Instance.GetGorillaCollider().GetComponent<Collider2D>());
         isFalling = false;
         isCrying = false;
-        isFetched = false;
-        isGoingUp = false;
+        this.IsFetched = false;
+        this.IsGoingUp = false;
 
         kidAnim.SetBool("isFalling", false);
         if(targetPosition.x > 0)
@@ -72,7 +81,7 @@ public class KidMover : MonoBehaviour {
             float step = GameModel.Instance.Speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
         }
-        else if (isCrying && !isFetched)
+        else if (isCrying && !this.IsFetched)
         {
             if (GameModel.Instance.TimeLimitToFetchChild < (Time.time - kidFallingTime))
             {
@@ -82,14 +91,14 @@ public class KidMover : MonoBehaviour {
             {
                 UpdateTimeBar();
             }
-
         }
-        else if (isGoingUp & isCrying)
+        else if (this.IsGoingUp & isCrying)
         {
 			kidTargetPosition = new Vector3(transform.position.x, 0.62f, 0.0f);
             float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
             transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
             GetComponent<Rigidbody2D>().isKinematic = true;
+            Debug.Log("Going Up");
             ResetHealthBar();
         }
 
@@ -112,16 +121,19 @@ public class KidMover : MonoBehaviour {
     {
         if (collider.tag == "Gorilla")
         {
-			GameController.Instance.ActivateThrowBackButtons (this);
+            KidMovementController.Instance.kid = this;
+            KidMovementController.Instance.ShouldAllowKidDragging = true;
+            //isFetched = true;
+            //isGoingUp = KidMovementController.Instance.ThrowUp;
         }
     }
 
-	public void ThrowbackKid()
-	{
-		isFetched = true;
-		isGoingUp = true;
-		GameController.Instance.DeactivateThrowbackButtons (kidfetchEarning);
-	}
+	//public void ThrowbackKid()
+	//{
+	//	isFetched = true;
+	//	isGoingUp = true;
+	//	GameController.Instance.DeactivateThrowbackButtons (kidfetchEarning);
+	//}
 
     //void OnTriggerExit2D(Collider2D collider)
     //{

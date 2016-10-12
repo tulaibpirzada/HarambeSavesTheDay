@@ -11,6 +11,7 @@ public class GameReferences : MonoBehaviour
     public Text highScore;
 	public GameObject leftMovementControl;
 	public GameObject rightMovementControl;
+    //public GameObject upMovementControl;
 	public GameObject gorilla;
     public GameObject[] kids;
     public SpriteRenderer timeBar;

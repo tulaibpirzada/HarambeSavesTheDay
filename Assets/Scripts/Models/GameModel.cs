@@ -8,6 +8,12 @@ public class GameModel: Singleton <GameModel>
     private float speed;
     private float currentTime;
 
+    public bool KidInside
+    {
+        get;
+        set;
+    }
+
     public float CurrentTime
     {
         get { return currentTime; }

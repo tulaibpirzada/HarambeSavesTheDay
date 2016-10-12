@@ -4,8 +4,8 @@ using System.Collections;
 public class GameEvents : MonoBehaviour 
 {
 
-	public void ThrowbackButtonTapped() 
-	{
-		GameController.Instance.ThrowBackKid ();
-	}
+	//public void ThrowbackButtonTapped() 
+	//{
+	//	GameController.Instance.ThrowBackKid ();
+	//}
 }

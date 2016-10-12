@@ -27,8 +27,10 @@ public class GameController : Singleton<GameController>
 	public void StartGame()
 	{
 		GameStartScreenController.Instance.HideGameStartMenu ();
-		UpdateScore (GameModel.Instance.Score);
+		UpdateScoreLabel ();
+        GameModel.Instance.KidInside = false;
 		GorillaMovementController.Instance.Init (gameContextObject);
+        KidMovementController.Instance.Init(gameContextObject);
 //		ResetHealthBar();
         StartCoroutine(Spawn());
     }
@@ -61,10 +63,15 @@ public class GameController : Singleton<GameController>
         }
         
     }
-    public void UpdateScore(int score)
+    public void UpdateScore(int addedScore)
     {
-		gameRef.playerScoreLabel.text = "Score: " + score.ToString();
-        Debug.Log("Score: " + score);
+        GameModel.Instance.Score += addedScore;
+        UpdateScoreLabel();
+    }
+    public void UpdateScoreLabel()
+    {
+		gameRef.playerScoreLabel.text = "Score: " + GameModel.Instance.Score.ToString();
+        Debug.Log("Score: " + GameModel.Instance.Score);
     } 
     IEnumerator Dead()
     {
@@ -91,10 +98,10 @@ public class GameController : Singleton<GameController>
 		UpdateScore(GameModel.Instance.Score);
 	}
 
-	public void ThrowBackKid()
-	{
-		fetchedKid.ThrowbackKid ();
-	}
+	//public void ThrowBackKid()
+	//{
+	//	fetchedKid.ThrowbackKid ();
+	//}
 
 	public GameObject GetLeftHandControlCollider ()
 	{
@@ -110,4 +117,8 @@ public class GameController : Singleton<GameController>
     {
         return gameRef.gorilla;
     }
+    //public GameObject UpMovementControlCollider()
+    //{
+    //    return gameRef.upMovementControl;
+    //}
 }
