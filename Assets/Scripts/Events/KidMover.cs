@@ -10,6 +10,7 @@ public class KidMover : MonoBehaviour {
     public SpriteRenderer timeBar;
     private Vector3 targetPosition;
     private Vector3 kidTargetPosition;
+    private Vector3 againWalkingkidTargetPosition;
     private bool isFalling;
     private bool isCrying;
     private Animator kidAnim;
@@ -33,6 +34,7 @@ public class KidMover : MonoBehaviour {
 	{
         kidAnim = GetComponent<Animator>();
 		targetPosition = new Vector3(-transform.position.x, 0.62f, 0.0f);
+        againWalkingkidTargetPosition = targetPosition;
         GameModel.Instance.CurrentTime = GameModel.Instance.TimeLimitToFetchChild;
         ResetHealthBar();
         Debug.Log("Start");
@@ -94,12 +96,30 @@ public class KidMover : MonoBehaviour {
         }
         else if (this.IsGoingUp & isCrying)
         {
-			kidTargetPosition = new Vector3(transform.position.x, 0.62f, 0.0f);
+            kidTargetPosition = new Vector3(transform.position.x, 0.62f, 0.0f);
             float kidStep = GameModel.Instance.Speed * (Time.deltaTime * 6.0f);
             transform.position = Vector3.MoveTowards(transform.position, kidTargetPosition, kidStep);
             GetComponent<Rigidbody2D>().isKinematic = true;
             Debug.Log("Going Up");
             ResetHealthBar();
+            if (transform.position == kidTargetPosition)
+            {
+                float walkAgainStep = GameModel.Instance.Speed * Time.deltaTime;
+                if (targetPosition.x > 0)
+                {
+                    kidAnim.SetFloat("x", 1);
+                    Debug.Log("Going Right");
+                }
+                else if (targetPosition.x < 0)
+                {
+                    kidAnim.SetFloat("x", -1);
+                    Debug.Log("Going Left");
+                }
+                againWalkingkidTargetPosition.x = targetPosition.x + 50;
+                transform.position = Vector3.MoveTowards(transform.position, againWalkingkidTargetPosition, walkAgainStep);
+
+            }
+
         }
 
     }

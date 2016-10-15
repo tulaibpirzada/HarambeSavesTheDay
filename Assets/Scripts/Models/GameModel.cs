@@ -47,5 +47,6 @@ public class GameModel: Singleton <GameModel>
         timeLimitToFetchChild = 5.0f;
 		this.Score = 0;
 		this.HighScore = 0;
+        this.KidInside = false;
     }
 }
