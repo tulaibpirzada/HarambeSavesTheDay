@@ -34,6 +34,7 @@ public class KidMover : MonoBehaviour {
 	{
         kidAnim = GetComponent<Animator>();
 		targetPosition = new Vector3(-transform.position.x, 0.62f, 0.0f);
+        Debug.Log("Target Position IN STart" + targetPosition.x);
         againWalkingkidTargetPosition = targetPosition;
         GameModel.Instance.CurrentTime = GameModel.Instance.TimeLimitToFetchChild;
         ResetHealthBar();
@@ -47,6 +48,7 @@ public class KidMover : MonoBehaviour {
         this.IsGoingUp = false;
 
         kidAnim.SetBool("isFalling", false);
+        kidAnim.SetBool("isWalking", true);
         if(targetPosition.x > 0)
         {
             kidAnim.SetFloat("x", 1);
@@ -62,15 +64,17 @@ public class KidMover : MonoBehaviour {
 		yield return new WaitForSeconds(Random.Range (1.0f, 7.0f));
         isFalling = false;
         isStanding = true;
+        kidAnim.SetBool("isWalking", false);
         kidAnim.SetBool("isStanding", true);
     }
 
 	IEnumerator FallKid()
 	{
-		yield return new WaitForSeconds (Random.Range (2.0f, 5.0f));
+		yield return new WaitForSeconds (Random.Range (2.0f, 5.0f));       
 		isFalling = true;
         isCrying = false;
         isStanding = false;
+        kidAnim.SetBool("isWalking", false);
         kidAnim.SetBool("isStanding", false);
         kidAnim.SetBool("isFalling", true);
 		GetComponent<Rigidbody2D>().isKinematic = false;
@@ -82,6 +86,7 @@ public class KidMover : MonoBehaviour {
         {
             float step = GameModel.Instance.Speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+            Debug.Log("Target Position IN UPDATE" + targetPosition.x);
         }
         else if (isCrying && !this.IsFetched)
         {
@@ -108,22 +113,60 @@ public class KidMover : MonoBehaviour {
                 if (targetPosition.x > 0)
                 {
                     kidAnim.SetFloat("x", 1);
+                    kidAnim.SetBool("isWalking", true);
+                    kidAnim.SetBool("isFalling", false);
+                    kidAnim.SetBool("isStanding", false);
+                    kidAnim.SetBool("isCrying", false);
+                    Debug.Log("Target Position Right" + targetPosition.x);
                     Debug.Log("Going Right");
+                    againWalkingkidTargetPosition.x = targetPosition.x + 50;
+                    transform.position = Vector3.MoveTowards(transform.position, againWalkingkidTargetPosition, walkAgainStep);
                 }
                 else if (targetPosition.x < 0)
                 {
                     kidAnim.SetFloat("x", -1);
+                    kidAnim.SetBool("isWalking", true);
+                    kidAnim.SetBool("isFalling", false);
+                    kidAnim.SetBool("isStanding", false);
+                    kidAnim.SetBool("isCrying", false);
+                    Debug.Log("Target Position" + targetPosition.x);
                     Debug.Log("Going Left");
+                    againWalkingkidTargetPosition.x = targetPosition.x - 50;
+                    transform.position = Vector3.MoveTowards(transform.position, againWalkingkidTargetPosition, walkAgainStep);
                 }
-                againWalkingkidTargetPosition.x = targetPosition.x + 50;
-                transform.position = Vector3.MoveTowards(transform.position, againWalkingkidTargetPosition, walkAgainStep);
 
             }
-
         }
 
     }
-	void OnCollisionEnter2D(Collision2D collision)
+    public void AgainWalkingKid()
+    {
+        float walkAgainStep = GameModel.Instance.Speed * Time.deltaTime;
+        if (targetPosition.x > 0)
+        {
+            kidAnim.SetFloat("x", 1);
+            kidAnim.SetBool("isFalling", false);
+            kidAnim.SetBool("isStanding", false);
+            kidAnim.SetBool("isCrying", false);
+            Debug.Log("Target Position Right" + targetPosition.x);
+            Debug.Log("Going Right");
+            againWalkingkidTargetPosition.x = targetPosition.x + 50;
+            transform.position = Vector3.MoveTowards(transform.position, againWalkingkidTargetPosition, walkAgainStep);
+        }
+        else if (targetPosition.x < 0)
+        {
+            kidAnim.SetFloat("x", -1);
+            kidAnim.SetBool("isFalling", false);
+            kidAnim.SetBool("isStanding", false);
+            kidAnim.SetBool("isCrying", false);
+            Debug.Log("Target Position" + targetPosition.x);
+            Debug.Log("Going Left");
+            againWalkingkidTargetPosition.x = targetPosition.x - 50;
+            transform.position = Vector3.MoveTowards(transform.position, againWalkingkidTargetPosition, walkAgainStep);
+        }
+        
+    }
+    void OnCollisionEnter2D(Collision2D collision)
     {
 		if(collision.gameObject.tag == "Ground")
 		{
